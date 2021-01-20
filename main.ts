@@ -18,7 +18,7 @@ namespace DS18B20{
     }
 
     //% weight=10
-    //% block="Probe connected to pin %pin"
+    //% block="set pin %pin"
     //% pin.fieldEditor="gridpicker" pin.fieldOptions.columns=4
     export function argpin(pin: DigitalPin) {
         mpin = pin
@@ -89,7 +89,7 @@ namespace DS18B20{
             default:
                 return 0
         } */
-        return temperature
+        return temperature*10
         
 
     }

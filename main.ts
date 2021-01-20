@@ -17,7 +17,9 @@ namespace DS18B20{
         DS18B20_temperature_F
     }
 
-    //% block="set pin %pin"
+    //% weight=10
+    //% block = "Probe connected to pin %arg_pin"
+    //% arg_pin.fieldEditor="gridpicker" arg_pin.fieldOptions.columns=4
     export function argpin(pin: DigitalPin) {
         mpin = pin
     }
@@ -60,7 +62,8 @@ namespace DS18B20{
         }
         return dat
     }
-    //% block="value of DS18B20 %state at pin %pin"
+    //% weight=10
+    //% block="Temperature"
     export function Ds18b20Temp():number{
         init_18b20(mpin)
         write_18b20(mpin,0xCC)

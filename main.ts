@@ -18,7 +18,7 @@ namespace DS18B20{
     }
 
     //% weight=10
-    //% block = "Probe connected to pin %pin"
+    //% block="Probe connected to pin %pin"
     //% pin.fieldEditor="gridpicker" pin.fieldOptions.columns=4
     export function argpin(pin: DigitalPin) {
         mpin = pin

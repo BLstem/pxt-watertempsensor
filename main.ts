@@ -8,6 +8,7 @@ namespace DS18B20{
     let temperature = 0
     let ack = 0
     let lastTemp = 0
+    let mpin = 0
     export enum ValType {
         //% block="temperature(℃)" enumval=0
         DS18B20_temperature_C,
@@ -15,7 +16,13 @@ namespace DS18B20{
         //% block="temperature(℉)" enumval=1
         DS18B20_temperature_F
     }
-    function init_18b20(mpin:DigitalPin) {
+
+    //% block="set pin %pin"
+    function argpin(pin: DigitalPin) {
+        mpin = pin
+    }
+
+    function init_18b20() {
         pins.digitalWritePin(mpin, 0)
         control.waitMicros(600)
         pins.digitalWritePin(mpin, 1)
@@ -24,7 +31,7 @@ namespace DS18B20{
         control.waitMicros(600)
         return ack
     }
-    function write_18b20 (mpin:DigitalPin,data: number) {
+    function write_18b20 (data: number) {
         sc_byte = 0x01
         for (let index = 0; index < 8; index++) {
             pins.digitalWritePin(mpin, 0)
@@ -39,7 +46,7 @@ namespace DS18B20{
             data = data >> 1
         }
     }
-    function read_18b20 (mpin:DigitalPin) {
+    function read_18b20 () {
         dat = 0x00
         sc_byte = 0x01
         for (let index = 0; index < 8; index++) {
@@ -54,7 +61,7 @@ namespace DS18B20{
         return dat
     }
     //% block="value of DS18B20 %state at pin %pin"
-    export function Ds18b20Temp(state:ValType,pin:DigitalPin):number{
+    export function Ds18b20Temp():number{
         init_18b20(pin)
         write_18b20(pin,0xCC)
         write_18b20(pin,0x44)
@@ -70,7 +77,7 @@ namespace DS18B20{
             temperature = lastTemp
         }
         lastTemp = temperature
-        switch (state) {
+        /**switch (state) {
             case ValType.DS18B20_temperature_C:
                 return temperature
             case ValType.DS18B20_temperature_F:
@@ -78,7 +85,9 @@ namespace DS18B20{
                 return temperature
             default:
                 return 0
-        }
+        } */
+        return temperature
+        
 
     }
 

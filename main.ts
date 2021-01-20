@@ -18,7 +18,7 @@ namespace DS18B20{
     }
 
     //% block="set pin %pin"
-    function argpin(pin: DigitalPin) {
+    export function argpin(pin: DigitalPin) {
         mpin = pin
     }
 

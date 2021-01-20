@@ -22,37 +22,37 @@ namespace DS18B20{
         mpin = pin
     }
 
-    function init_18b20() {
-        pins.digitalWritePin(mpin, 0)
+    function init_18b20(readingpin: DigitalPin) {
+        pins.digitalWritePin(readingpin, 0)
         control.waitMicros(600)
-        pins.digitalWritePin(mpin, 1)
+        pins.digitalWritePin(readingpin, 1)
         control.waitMicros(30)
-        ack = pins.digitalReadPin(mpin)
+        ack = pins.digitalReadPin(readingpin)
         control.waitMicros(600)
         return ack
     }
-    function write_18b20 (data: number) {
+    function write_18b20 (readingpin: DigitalPin, data: number) {
         sc_byte = 0x01
         for (let index = 0; index < 8; index++) {
-            pins.digitalWritePin(mpin, 0)
+            pins.digitalWritePin(readingpin, 0)
             if (data & sc_byte) {
-                pins.digitalWritePin(mpin, 1)
+                pins.digitalWritePin(readingpin, 1)
                 control.waitMicros(60)
             } else {
-                pins.digitalWritePin(mpin, 0)
+                pins.digitalWritePin(readingpin, 0)
                 control.waitMicros(60)
             }
-            pins.digitalWritePin(mpin, 1)
+            pins.digitalWritePin(readingpin, 1)
             data = data >> 1
         }
     }
-    function read_18b20 () {
+    function read_18b20 (readingpin: DigitalPin) {
         dat = 0x00
         sc_byte = 0x01
         for (let index = 0; index < 8; index++) {
-            pins.digitalWritePin(mpin, 0)
-            pins.digitalWritePin(mpin, 1)
-            if (pins.digitalReadPin(mpin)) {
+            pins.digitalWritePin(readingpin, 0)
+            pins.digitalWritePin(readingpin, 1)
+            if (pins.digitalReadPin(readingpin)) {
                 dat = dat + sc_byte
             }
             sc_byte = sc_byte << 1
@@ -62,15 +62,15 @@ namespace DS18B20{
     }
     //% block="value of DS18B20 %state at pin %pin"
     export function Ds18b20Temp():number{
-        init_18b20(pin)
-        write_18b20(pin,0xCC)
-        write_18b20(pin,0x44)
+        init_18b20(mpin)
+        write_18b20(mpin,0xCC)
+        write_18b20(mpin,0x44)
         basic.pause(10)
-        init_18b20(pin)
-        write_18b20(pin,0xCC)
-        write_18b20(pin,0xBE)
-        low = read_18b20(pin)
-        high = read_18b20(pin)
+        init_18b20(mpin)
+        write_18b20(mpin,0xCC)
+        write_18b20(mpin,0xBE)
+        low = read_18b20(mpin)
+        high = read_18b20(mpin)
         temperature = high << 8 | low
         temperature = temperature / 16
         if(temperature > 130){
